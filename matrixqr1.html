@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Code Display</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: black;
+      overflow: hidden; /* Hide overflowing content */
+    }
+
+    .code-display {
+      position: relative;
+      border: 1px solid #ccc;
+      padding: 20px;
+      max-width: 80%;
+      overflow: hidden;
+      color: #00FF00;
+      font-size: 200%;
+      z-index: 2; /* Ensure text is in front of the background */
+    }
+
+    /* Animation for falling codes */
+    @keyframes fallingCodes {
+      from {
+        transform: translateY(-100vh);
+      }
+      to {
+        transform: translateY(100vh);
+      }
+    }
+
+    /* Styling for falling codes */
+    .falling-codes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none; /* Allow clicks to pass through */
+      z-index: 1; /* Ensure behind the text */
+      animation: fallingCodes 20s linear infinite; /* Adjust animation duration */
+    }
+  </style>
+</head>
+<body>
+  <!-- Falling codes background -->
+  <div class="falling-codes">
+    <!-- Adjust the content of the falling codes as needed -->
+    <pre>
+      &zwj; /* Add some invisible zero-width joiners to ensure spacing */
+      /* Random code characters or symbols */
+      const getRandomCode = () => String.fromCharCode(Math.floor(Math.random() * (127 - 33)) + 33);
+      const createFallingCodes = () => {
+        const codes = Array.from({ length: 200 }, () => getRandomCode()).join('');
+        return codes;
+      };
+      setInterval(() => {
+        document.querySelector('.falling-codes pre').textContent = createFallingCodes();
+      }, 100);
+    </pre>
+  </div>
+
+  <!-- Main code display -->
+  <div class="code-display">
+    <pre id="code"></pre>
+  </div>
+
+  <script>
+    const codeElement = document.getElementById('code');
+    const codeSnippet = `[Die Batterie-Wechselstation wurde betreten] Initialisierung der Kamera.
+
+[Kamera initialisiert] Bereit zum Scannen von QR-Codes.
+
+[Kein QR-Code erkannt]
+[Antwort] Kein QR-Code gefunden. Fortsetzung des Scannens...
+
+[QR-Code erkannt] Daten: "swap_mode_on"
+[Aktion] Wechselmodus aktiviert.
+[Antwort] Wechselmodus aktiviert.
+               `;
+
+    let index = 0;
+
+    function displayCode() {
+      codeElement.textContent = codeSnippet.substring(0, index);
+      if (index < codeSnippet.length) {
+        index++;
+        setTimeout(displayCode, 50); // Adjust the delay (in milliseconds) to control the speed
+      }
+    }
+
+    // Call the function to start displaying code
+    displayCode();
+  </script>
+</body>
+</html>
